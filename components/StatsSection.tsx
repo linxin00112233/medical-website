@@ -20,7 +20,7 @@ const StatsSection: React.FC = () => {
           {STATS.map((stat, index) => (
             <AnimatedSection key={stat.id} delay={index * 0.1}>
               <div className="p-4">
-                <div className="text-5xl md:text-6xl font-bold text-cuhk-secondary mb-2 font-serif">
+                <div className="text-5xl md:text-6xl font-bold text-gray-200 mb-2 font-serif">
                   <CountUp end={stat.value} suffix={stat.suffix} />
                 </div>
                 <div className="h-1 w-12 bg-white/30 mx-auto mb-4"></div>

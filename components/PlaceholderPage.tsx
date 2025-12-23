@@ -13,7 +13,7 @@ const PlaceholderPage: React.FC<PlaceholderPageProps> = ({ title,headerClassName
       {/* Page Header */}
       {/* Added pt-32 (128px) to account for the transparent header height + spacing */}
       <div className={cn(
-        "bg-cuhk-primary text-white pt-32 pb-16 px-4 relative overflow-hidden",
+        "bg-cuhk-dark text-white pt-32 pb-16 px-4 relative overflow-hidden",
         headerClassName
       )}>
         <div className="absolute inset-0 opacity-10">

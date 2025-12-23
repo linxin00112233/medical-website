@@ -10,11 +10,11 @@ const Hero: React.FC = () => {
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background Image/Video */}
       <div className="absolute inset-0">
-        <img 
+        {/* <img 
           src="https://images.unsplash.com/photo-1631558556874-1d377b218998?q=80&w=2600&auto=format&fit=crop" 
           alt="Medical School Building"
           className="w-full h-full object-cover"
-        />
+        /> */}
         {/* Dark Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/60" />
       </div>
