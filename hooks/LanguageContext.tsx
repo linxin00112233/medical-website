@@ -10,9 +10,8 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Detect browser language for default initialization
+  // 获取浏览器语言
   const getBrowserLanguage = (): Language => {
-    // Check navigator.language (standard) and fallback to navigator.languages array if available
     const browserLang = navigator.language || (navigator.languages && navigator.languages[0]);
     
     if (browserLang && browserLang.toLowerCase().startsWith('zh')) {

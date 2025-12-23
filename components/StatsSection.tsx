@@ -1,7 +1,7 @@
 import React from 'react';
 import CountUp from './ui/CountUp';
 import AnimatedSection from './ui/AnimatedSection';
-import { STATS } from '../constants';
+import { STATS } from '../assets/constants';
 
 const StatsSection: React.FC = () => {
   return (

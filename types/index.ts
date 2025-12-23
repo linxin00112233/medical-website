@@ -1,3 +1,4 @@
+//类型定义文件
 export interface NavItem {
   label: string;
   href: string;
@@ -26,4 +27,10 @@ export interface EventItem {
   month: string;
   title: string;
   location: string;
+}
+
+export interface ProgramItem {
+  title: string;
+  desc: string;
+  img: string;
 }

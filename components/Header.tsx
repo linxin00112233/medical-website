@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Search, Globe } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { NAV_ITEMS } from '../constants';
+import { NAV_ITEMS } from '../assets/constants';
 import { cn } from '@/utils';
 import { useLanguage } from '@/hooks/LanguageContext';
 import { TranslationKey } from '@/locales/translations';

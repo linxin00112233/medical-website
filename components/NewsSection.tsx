@@ -1,6 +1,6 @@
 import React from 'react';
 import AnimatedSection from './ui/AnimatedSection';
-import { NEWS_ITEMS, EVENTS } from '../constants';
+import { NEWS_ITEMS, EVENTS } from '../assets/constants';
 import { ArrowRight, Calendar } from 'lucide-react';
 
 const NewsSection: React.FC = () => {

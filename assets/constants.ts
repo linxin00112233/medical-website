@@ -1,6 +1,5 @@
-import { NewsItem, StatItem, EventItem } from "./types";
+import { NewsItem, StatItem, EventItem, ProgramItem } from "@/types/index";
 
-// We store keys here, the component will translate them
 export const NAV_ITEMS = [
   { key: "nav.home", href: "/" },
   { key: "nav.about", href: "/about" },
@@ -69,5 +68,23 @@ export const EVENTS: EventItem[] = [
     month: "NOV",
     title: "Bio-Medical Innovation Forum",
     location: "Conference Hall",
+  },
+];
+
+export const PROGRAMS: ProgramItem[] = [
+  {
+    title: "Clinical Medicine",
+    desc: "Developing competent and compassionate doctors.",
+    img: "https://picsum.photos/id/1060/600/400",
+  },
+  {
+    title: "Bioinformatics",
+    desc: "Bridging biology and data science.",
+    img: "https://picsum.photos/id/4/600/400",
+  },
+  {
+    title: "Pharmaceutical Science",
+    desc: "Innovating for future drug discovery.",
+    img: "https://picsum.photos/id/201/600/400",
   },
 ];

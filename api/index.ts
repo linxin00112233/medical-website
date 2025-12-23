@@ -1,5 +1,5 @@
-import { NEWS_ITEMS, EVENTS, STATS } from '../constants';
-import { wait } from '../utils';
+import { NEWS_ITEMS, EVENTS, STATS } from "../assets/constants";
+import { wait } from "../utils";
 
 // Mock API service
 export const api = {
@@ -7,7 +7,7 @@ export const api = {
     await wait(500); // Simulate network latency
     return NEWS_ITEMS;
   },
-  
+
   getEvents: async () => {
     await wait(300);
     return EVENTS;
@@ -16,5 +16,5 @@ export const api = {
   getStats: async () => {
     await wait(400);
     return STATS;
-  }
+  },
 };

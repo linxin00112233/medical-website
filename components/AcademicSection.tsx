@@ -1,12 +1,7 @@
 import React from 'react';
 import AnimatedSection from './ui/AnimatedSection';
 import { ArrowRight } from 'lucide-react';
-
-const programs = [
-  { title: 'Clinical Medicine', desc: 'Developing competent and compassionate doctors.', img: 'https://picsum.photos/id/1060/600/400' },
-  { title: 'Bioinformatics', desc: 'Bridging biology and data science.', img: 'https://picsum.photos/id/4/600/400' },
-  { title: 'Pharmaceutical Science', desc: 'Innovating for future drug discovery.', img: 'https://picsum.photos/id/201/600/400' },
-];
+import { PROGRAMS } from '@/assets/constants';
 
 const AcademicSection: React.FC = () => {
   return (
@@ -23,7 +18,7 @@ const AcademicSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {programs.map((prog, index) => (
+          {PROGRAMS.map((prog, index) => (
             <AnimatedSection key={index} delay={index * 0.15}>
               <div className="group relative overflow-hidden h-80 rounded-sm shadow-lg">
                 <img 
