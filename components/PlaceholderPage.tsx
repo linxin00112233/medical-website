@@ -8,10 +8,9 @@ interface PlaceholderPageProps {
 
 const PlaceholderPage: React.FC<PlaceholderPageProps> = ({ title,headerClassName }) => {
   return (
-    // Removed pt-24 so the purple banner goes to the very top behind the fixed header
+
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Page Header */}
-      {/* Added pt-32 (128px) to account for the transparent header height + spacing */}
+
       <div className={cn(
         "bg-cuhk-dark text-white pt-32 pb-16 px-4 relative overflow-hidden",
         headerClassName
@@ -38,7 +37,6 @@ const PlaceholderPage: React.FC<PlaceholderPageProps> = ({ title,headerClassName
         </div>
       </div>
 
-      {/* Content Placeholder */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1">
         <motion.div
           initial={{ opacity: 0 }}

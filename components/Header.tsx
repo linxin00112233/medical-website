@@ -1,186 +1,250 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Search, Globe } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, Search, ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { NAV_ITEMS } from '../assets/constants';
+import { motion, AnimatePresence } from 'framer-motion';
+import { NAV_ITEMS } from '@/assets/constants';
 import { cn } from '@/utils';
 import { useLanguage } from '@/hooks/LanguageContext';
 import { TranslationKey } from '@/locales/translations';
+import logoSrc from '@/images/logo.svg';
 
 const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
-  const { language, setLanguage, t } = useLanguage();
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
+    const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const location = useLocation();
+    const { language, setLanguage, t } = useLanguage();
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        if (isSearchOpen && searchInputRef.current) {
+            searchInputRef.current.focus();
+        }
+    }, [isSearchOpen]);
+
+    const toggleLanguage = (lang: 'en' | 'zh') => {
+        setLanguage(lang);
+        setIsLangDropdownOpen(false);
     };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
 
-  const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'zh' : 'en');
-  };
+    const closeSearch = () => {
+        setSearchValue('');
+        setIsSearchOpen(false);
+    };
 
-  
-  // 背景颜色
-  const headerBgClass = isScrolled 
-    ? "bg-white/95 backdrop-blur-md shadow-md py-0" 
-    : "bg-gradient-to-b from-black/60 to-transparent py-2";
+    const headerBgClass = isScrolled
+        ? "bg-white shadow-md py-0"
+        : "bg-transparent py-2 md:py-4";
 
-  // 文字颜色
-  const textColorClass = isScrolled ? 'text-cuhk-dark' : 'text-white';
-  const logoTextMain = isScrolled ? 'text-cuhk-primary' : 'text-white';
-  const logoTextSub = isScrolled ? 'text-gray-500' : 'text-gray-300';
-  const borderColor = isScrolled ? 'border-gray-200' : 'border-white/20';
+    const textColorClass = isScrolled ? 'text-gray-800' : 'text-white';
+    const activeLinkClass = "text-cuhk-primary";
+    const hoverLinkClass = "hover:text-cuhk-primary";
 
-  return (
-    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out font-sans", headerBgClass)}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className={cn(
-            "flex items-center justify-between transition-all duration-300",
-            isScrolled ? "py-2" : "py-4"
-          )}>
-          
-          <Link to="/" className="flex items-center space-x-3 group">
-             <div className={cn(
-               "w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-300 shadow-sm",
-               isScrolled ? "bg-cuhk-primary" : "bg-white"
-             )}>
-                <span className={cn(
-                  "font-bold text-lg md:text-xl transition-colors duration-300",
-                  isScrolled ? "text-white" : "text-cuhk-primary"
-                )}>M</span>
-             </div>
-             <div className="flex flex-col">
-               <span className={cn(
-                 "text-[10px] md:text-xs uppercase tracking-wider transition-colors duration-300",
-                 logoTextSub
-               )}>{t('header.university')}</span>
-               <span className={cn(
-                 "text-lg md:text-2xl font-serif font-bold leading-none transition-colors duration-300 group-hover:text-cuhk-secondary",
-                 logoTextMain
-               )}>{t('header.school')}</span>
-             </div>
-          </Link>
+    return (
+        <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", headerBgClass)}>
 
-          <div className={`hidden lg:flex items-center space-x-6 ${textColorClass}`}>
-            <div className={cn(
-              "flex items-center rounded-full px-3 py-1.5 transition-colors",
-              isScrolled ? "bg-gray-100" : "bg-white/10 hover:bg-white/20"
-            )}>
-              <input 
-                type="text" 
-                placeholder={language === 'en' ? "Search..." : "搜索..."}
-                className="bg-transparent border-none outline-none text-xs w-24 md:w-32 placeholder-current opacity-70" 
-              />
-              <Search size={14} className="opacity-70" />
+            <div className="w-full px-3 md:px-6 lg:px-10">
+                <div className="flex items-center justify-between h-20 lg:h-24">
+
+
+                    <Link to="/" className="flex items-center shrink-0">
+                        <img
+                            src={logoSrc}
+                            alt="CUHK-Shenzhen Medicine Logo"
+                            className={cn(
+                                "h-10 md:h-14 lg:h-16 w-auto object-contain transition-all duration-300",
+                                !isScrolled && "brightness-0 invert"
+                            )}
+                        />
+                    </Link>
+
+
+                    <nav className="hidden xl:flex items-center justify-center flex-1 mx-4 overflow-hidden">
+                        <ul className="flex items-center space-x-1 lg:space-x-2">
+                            {NAV_ITEMS.map((item) => {
+                                const isActive = location.pathname === item.href;
+                                return (
+                                    <li key={item.key}>
+                                        <Link
+                                            to={item.href}
+                                            className={cn(
+                                                "px-2 lg:px-3 py-2 text-[15px] lg:text-[16px] font-bold transition-colors whitespace-nowrap",
+                                                isActive ? activeLinkClass : cn(textColorClass, hoverLinkClass)
+                                            )}
+                                        >
+                                            {t(item.key as TranslationKey)}
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </nav>
+
+
+                    <div className="flex items-center space-x-2 md:space-x-4 shrink-0">
+
+
+                        <div className="relative flex items-center h-10">
+                            <AnimatePresence mode="wait">
+                                {isSearchOpen ? (
+                                    <motion.div
+                                        key="search-open"
+                                        initial={{ width: 40, opacity: 0 }}
+                                        animate={{ width: 180, opacity: 1 }}
+                                        exit={{ width: 40, opacity: 0 }}
+                                        className={cn(
+                                            "flex items-center px-2 py-1.5 rounded-full border",
+                                            isScrolled ? "bg-gray-100 border-gray-200" : "bg-white/20 border-white/30"
+                                        )}
+                                    >
+                                        <Search size={16} className={cn("shrink-0", isScrolled ? "text-cuhk-primary" : "text-white")} />
+                                        <input
+                                            ref={searchInputRef}
+                                            type="text"
+                                            value={searchValue}
+                                            onChange={(e) => setSearchValue(e.target.value)}
+                                            placeholder={language === 'zh' ? "搜索" : "Search"}
+                                            className={cn(
+                                                "bg-transparent border-none outline-none text-sm w-full ml-1",
+                                                isScrolled ? "text-gray-800 placeholder-gray-500" : "text-white placeholder-white/70"
+                                            )}
+                                        />
+                                        <button onClick={closeSearch} className="shrink-0 hover:scale-110 transition-transform">
+                                            <X size={14} className={isScrolled ? "text-gray-400" : "text-white/60"} />
+                                        </button>
+                                    </motion.div>
+                                ) : (
+                                    <motion.button
+                                        key="search-icon"
+                                        onClick={() => setIsSearchOpen(true)}
+                                        className={cn("p-2 transition-colors", textColorClass, "hover:text-cuhk-primary")}
+                                    >
+                                        <Search size={22} />
+                                    </motion.button>
+                                )}
+                            </AnimatePresence>
+                        </div>
+
+
+                        <div className="relative shrink-0">
+                            <button
+                                className={cn(
+                                    "flex items-center space-x-1 py-2 px-1 text-[14px] lg:text-[15px] font-bold transition-colors uppercase tracking-widest whitespace-nowrap",
+                                    textColorClass, "hover:text-cuhk-primary"
+                                )}
+                                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                            >
+                                <span>{language === 'zh' ? '中文' : 'English'}</span>
+                                <ChevronDown size={16} className={cn("transition-transform", isLangDropdownOpen ? "rotate-180" : "")} />
+                            </button>
+
+                            <AnimatePresence>
+                                {isLangDropdownOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 10 }}
+                                        className="absolute right-0 top-full mt-2 bg-white shadow-2xl rounded-md overflow-hidden min-w-[120px] py-1 ring-1 ring-black ring-opacity-5"
+                                    >
+                                        <button
+                                            onClick={() => toggleLanguage('zh')}
+                                            className={cn(
+                                                "w-full text-left px-4 py-2.5 text-[14px] font-bold transition-colors",
+                                                language === 'zh' ? "text-[#750E6D] bg-gray-50" : "text-gray-700 hover:bg-gray-50"
+                                            )}
+                                        >
+                                            中文
+                                        </button>
+                                        <button
+                                            onClick={() => toggleLanguage('en')}
+                                            className={cn(
+                                                "w-full text-left px-4 py-2.5 text-[14px] font-bold transition-colors",
+                                                language === 'en' ? "text-[#750E6D] bg-gray-50" : "text-gray-700 hover:bg-gray-50"
+                                            )}
+                                        >
+                                            English
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+
+
+                        <button
+                            className={cn("xl:hidden p-2 transition-colors shrink-0", textColorClass)}
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            <Menu size={28} />
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <button 
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1 hover:text-cuhk-secondary transition-colors text-sm font-bold tracking-wide"
-            >
-              <Globe size={16} />
-              <span>{language === 'en' ? 'EN / 中' : '中 / EN'}</span>
-            </button>
-          </div>
 
-          {/*手机端菜单按钮*/}
-          <button 
-            className="lg:hidden z-50 p-2 rounded-md transition-colors text-current"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <div className={cn("p-1 rounded", isScrolled ? "text-cuhk-primary" : "text-white")}>
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </div>
-          </button>
-        </div>
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="fixed inset-0 bg-black/60 z-[60]"
+                        />
+                        <motion.div
+                            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="fixed right-0 top-0 bottom-0 w-[80%] max-w-sm bg-white z-[70] shadow-2xl p-6 flex flex-col"
+                        >
+                            <div className="flex justify-between items-center mb-10">
+                                <div className="shrink-0">
+                                    <img src={logoSrc} alt="Logo" className="h-10 w-auto" />
+                                </div>
+                                <button onClick={() => setIsMobileMenuOpen(false)}>
+                                    <X size={32} className="text-gray-400 hover:text-gray-600" />
+                                </button>
+                            </div>
 
-        <div className={cn("hidden lg:block w-full h-[1px]", borderColor)}></div>
+                            <nav className="space-y-1 overflow-y-auto">
+                                {NAV_ITEMS.map((item) => (
+                                    <Link
+                                        key={item.key}
+                                        to={item.href}
+                                        className="block py-4 text-lg font-bold text-gray-800 border-b border-gray-100 last:border-0 hover:text-cuhk-primary"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        {t(item.key as TranslationKey)}
+                                    </Link>
+                                ))}
+                            </nav>
 
-        <nav className="hidden lg:flex justify-center items-center py-1">
-          <ul className="flex items-center space-x-1">
-            {NAV_ITEMS.map((item) => {
-              const isActive = location.pathname === item.href;
-              const linkKey = item.key as TranslationKey;
-              return (
-                <li key={item.key} className="relative group">
-                  <Link
-                    to={item.href}
-                    className={cn(
-                      "block px-5 py-3 text-sm font-medium uppercase tracking-wide transition-colors duration-200 relative z-10",
-                      isActive 
-                        ? "text-cuhk-secondary font-bold" 
-                        : `${textColorClass} hover:text-cuhk-secondary`
-                    )}
-                  >
-                    {t(linkKey)}
-                  </Link>
-                  <span className="absolute bottom-1 left-1/2 w-0 h-[2px] bg-cuhk-secondary transition-all duration-300 ease-out group-hover:w-4/5 -translate-x-1/2 opacity-0 group-hover:opacity-100"></span>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-
-      {/* 手机菜单遮罩层 */}
-      <div className={cn(
-        "fixed inset-0 bg-cuhk-primary/98 z-40 transform transition-transform duration-300 ease-in-out lg:hidden backdrop-blur-sm",
-        isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-      )}>
-        <div className="flex flex-col h-full pt-24 px-8 pb-8 overflow-y-auto">
-          <div className="flex flex-col space-y-6">
-            {NAV_ITEMS.map((item) => {
-              const isActive = location.pathname === item.href;
-              const linkKey = item.key as TranslationKey;
-              return (
-                <Link
-                  key={item.key}
-                  to={item.href}
-                  className={cn(
-                    "text-2xl font-serif transition-colors border-b border-white/10 pb-4",
-                    isActive 
-                      ? "text-cuhk-secondary font-bold" 
-                      : "text-white hover:text-cuhk-secondary"
-                  )}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {t(linkKey)}
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="mt-auto pt-8 flex flex-col space-y-6">
-             <div className="flex items-center bg-white/10 rounded-lg p-3">
-                <Search size={20} className="text-white mr-3" />
-                <input 
-                  type="text" 
-                  placeholder={language === 'en' ? "Search..." : "搜索..."}
-                  className="bg-transparent border-none outline-none text-white placeholder-gray-400 w-full" 
-                />
-             </div>
-             
-             <button 
-               onClick={() => {
-                 toggleLanguage();
-               }}
-               className="flex items-center justify-center space-x-2 bg-white text-cuhk-primary py-3 rounded-lg font-bold"
-             >
-               <Globe size={20} />
-               <span>{language === 'en' ? 'Switch to Chinese' : 'Switch to English'}</span>
-             </button>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
+                            <div className="mt-auto pt-10">
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => { toggleLanguage('zh'); setIsMobileMenuOpen(false); }}
+                                        className={cn("flex-1 py-4 text-base font-bold rounded-lg border", language === 'zh' ? "bg-cuhk-primary text-white" : "text-gray-700")}
+                                    >中文</button>
+                                    <button
+                                        onClick={() => { toggleLanguage('en'); setIsMobileMenuOpen(false); }}
+                                        className={cn("flex-1 py-4 text-base font-bold rounded-lg border", language === 'en' ? "bg-cuhk-primary text-white" : "text-gray-700")}
+                                    >English</button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+        </header>
+    );
 };
 
 export default Header;

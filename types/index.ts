@@ -34,3 +34,17 @@ export interface ProgramItem {
   desc: string;
   img: string;
 }
+export interface ProgramItem {
+  title: string;
+  desc: string;
+  img: string;
+}
+
+export interface HerosSlidesItem{
+  id: number;
+  type: string;
+  url:string;
+  title: { prefix: string, highlight: string, suffix: string };
+  subtitle:string;
+  description:string;
+}

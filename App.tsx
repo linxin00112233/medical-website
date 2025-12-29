@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { HashRouter, useRoutes, useLocation } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {HashRouter, useLocation, useRoutes} from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import routes from '@/router/routes';
-import { LanguageProvider } from '@/hooks/LanguageContext';
+import {LanguageProvider} from '@/hooks/LanguageContext';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -16,8 +16,7 @@ const ScrollToTop = () => {
 }
 
 const AppRoutes = () => {
-  const element = useRoutes(routes);
-  return element;
+  return useRoutes(routes);
 };
 
 const App: React.FC = () => {

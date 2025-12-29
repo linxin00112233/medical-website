@@ -23,7 +23,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguage] = useState<Language>(getBrowserLanguage());
 
   const t = (key: TranslationKey): string => {
-    // @ts-ignore - simple type access
+
     return translations[language][key] || key;
   };
 

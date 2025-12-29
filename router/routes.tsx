@@ -1,39 +1,47 @@
 import { RouteObject } from 'react-router-dom';
 import HomePage from '@/components/HomePage';
 import PlaceholderPage from '@/components/PlaceholderPage';
-  //headerClassName 可以用来为不同页面的header添加不同的背景颜色等样式，默认紫色
+
 const routes: RouteObject[] = [
   {
     path: '/',
     element: <HomePage />,
   },
   {
-    path: '/about',
-    element: <PlaceholderPage title="About Us" />,
+    path: '/overview',
+    element: <PlaceholderPage title="医疗概况" />,
   },
   {
-    path: '/education',
-    element: <PlaceholderPage title="Education" headerClassName="bg-gray-800" />,
+    path: '/services',
+    element: <PlaceholderPage title="医疗服务" />,
   },
   {
     path: '/research',
-    element: <PlaceholderPage title="Research" />,
+    element: <PlaceholderPage title="科研创新" />,
   },
   {
-    path: '/faculty',
-    element: <PlaceholderPage title="Faculty" />,
+    path: '/education',
+    element: <PlaceholderPage title="教学培训" />,
   },
   {
-    path: '/admissions',
-    element: <PlaceholderPage title="Admissions" />,
+    path: '/guide',
+    element: <PlaceholderPage title="就医指南" />,
   },
   {
-    path: '/news',
-    element: <PlaceholderPage title="News & Events" />,
+    path: '/announcements',
+    element: <PlaceholderPage title="医院公告" />,
+  },
+  {
+    path: '/party',
+    element: <PlaceholderPage title="党群园地" />,
+  },
+  {
+    path: '/recruitment',
+    element: <PlaceholderPage title="人才招聘" />,
   },
   {
     path: '*',
-    element: <PlaceholderPage title="Page Not Found" />,
+    element: <PlaceholderPage title="Page Not Found" headerClassName="bg-gray-800" />,
   },
 ];
 

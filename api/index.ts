@@ -1,7 +1,6 @@
 import { NEWS_ITEMS, EVENTS, STATS } from "../assets/constants";
-import { wait } from "../utils";
+import { wait } from "@/utils";
 
-// Mock API service
 export const api = {
   getNews: async () => {
     await wait(500); // Simulate network latency
