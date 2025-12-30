@@ -1,47 +1,67 @@
-import { RouteObject } from 'react-router-dom';
-import HomePage from '@/components/HomePage';
-import PlaceholderPage from '@/components/PlaceholderPage';
+import { RouteObject } from "react-router-dom";
+import HomePage from "@/components/HomePage";
+import PlaceholderPage from "@/components/PlaceholderPage";
 
 const routes: RouteObject[] = [
   {
-    path: '/',
+    path: "/",
     element: <HomePage />,
   },
   {
-    path: '/overview',
-    element: <PlaceholderPage title="医疗概况" />,
+    path: "/overview",
+    children: [
+      {
+        path: "about",
+        element: <PlaceholderPage title="医院简介" />,
+      },
+    ],
   },
   {
-    path: '/services',
+    path: "/services",
     element: <PlaceholderPage title="医疗服务" />,
   },
   {
-    path: '/research',
+    path: "/research",
     element: <PlaceholderPage title="科研创新" />,
   },
   {
-    path: '/education',
+    path: "/education",
     element: <PlaceholderPage title="教学培训" />,
   },
   {
-    path: '/guide',
+    path: "/guide",
     element: <PlaceholderPage title="就医指南" />,
   },
   {
-    path: '/announcements',
+    path: "/announcements",
     element: <PlaceholderPage title="医院公告" />,
   },
   {
-    path: '/party',
+    path: "/party",
     element: <PlaceholderPage title="党群园地" />,
   },
   {
-    path: '/recruitment',
+    path: "/recruitment",
     element: <PlaceholderPage title="人才招聘" />,
   },
   {
-    path: '*',
-    element: <PlaceholderPage title="Page Not Found" headerClassName="bg-gray-800" />,
+    path: "/more",
+    children: [
+      {
+        path: "1",
+        element: <PlaceholderPage title="探索更多1" />,
+      },
+      {
+        path: "2",
+        element: <PlaceholderPage title="探索更多2" />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: (
+      <PlaceholderPage title="Page Not Found" headerClassName="bg-gray-800" />
+    ),
   },
 ];
 

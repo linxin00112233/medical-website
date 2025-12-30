@@ -9,242 +9,370 @@ import { TranslationKey } from '@/locales/translations';
 import logoSrc from '@/images/logo.svg';
 
 const Header: React.FC = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchValue, setSearchValue] = useState('');
-    const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  
+  const location = useLocation();
+  const { language, setLanguage, t } = useLanguage();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-    const location = useLocation();
-    const { language, setLanguage, t } = useLanguage();
-    const searchInputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    useEffect(() => {
-        if (isSearchOpen && searchInputRef.current) {
-            searchInputRef.current.focus();
-        }
-    }, [isSearchOpen]);
-
-    const toggleLanguage = (lang: 'en' | 'zh') => {
-        setLanguage(lang);
-        setIsLangDropdownOpen(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
     };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    const closeSearch = () => {
-        setSearchValue('');
-        setIsSearchOpen(false);
-    };
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
 
-    const headerBgClass = isScrolled
-        ? "bg-white shadow-md py-0"
-        : "bg-transparent py-2 md:py-4";
+  const toggleLanguage = (lang: 'en' | 'zh') => {
+    setLanguage(lang);
+    setIsLangDropdownOpen(false);
+  };
 
-    const textColorClass = isScrolled ? 'text-gray-800' : 'text-white';
-    const activeLinkClass = "text-cuhk-primary";
-    const hoverLinkClass = "hover:text-cuhk-primary";
+  const closeSearch = () => {
+    setSearchValue('');
+    setIsSearchOpen(false);
+  };
 
-    return (
-        <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", headerBgClass)}>
+  const isItemActive = (item: any) => {
+    if (location.pathname === item.href) return true;
+      if (item.subItems) {
+        console.log(item.subItems);
+        
+      return item.subItems.some((sub: any) => location.pathname === sub.href);
+    }
+    return false;
+  };
 
-            <div className="w-full px-3 md:px-6 lg:px-10">
-                <div className="flex items-center justify-between h-20 lg:h-24">
+  const headerBgClass = isScrolled 
+    ? "bg-white shadow-lg py-0 border-b border-gray-100" 
+    : "bg-transparent py-2 md:py-4";
 
+  const textColorClass = isScrolled ? 'text-gray-800' : 'text-white';
 
-                    <Link to="/" className="flex items-center shrink-0">
-                        <img
-                            src={logoSrc}
-                            alt="CUHK-Shenzhen Medicine Logo"
-                            className={cn(
-                                "h-10 md:h-14 lg:h-16 w-auto object-contain transition-all duration-300",
-                                !isScrolled && "brightness-0 invert"
-                            )}
-                        />
-                    </Link>
+  return (
+    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out", headerBgClass)}>
+      <div className="w-full px-4 md:px-8 lg:px-12">
+        <div className="flex items-center justify-between h-20 lg:h-24">
+          
+          {/* LOGO */}
+          <Link to="/" className="flex items-center shrink-0">
+             <img 
+               src={logoSrc} 
+               alt="CUHK-Shenzhen Medicine Logo" 
+               className={cn(
+                 "h-10 md:h-14 lg:h-16 w-auto object-contain transition-all duration-500",
+                 !isScrolled && "brightness-0 invert" 
+               )}
+             />
+          </Link>
 
+          {/* DESKTOP NAVIGATION */}
+          <nav className="hidden xl:flex items-center justify-center flex-1 mx-4 h-full">
+            <ul className="flex items-center h-full">
+              {NAV_ITEMS.map((item) => {
+                const isActive = isItemActive(item);
+                const hasSubItems = item.subItems && item.subItems.length > 0;
+                const isDirectLink = !hasSubItems;
 
-                    <nav className="hidden xl:flex items-center justify-center flex-1 mx-4 overflow-hidden">
-                        <ul className="flex items-center space-x-1 lg:space-x-2">
-                            {NAV_ITEMS.map((item) => {
-                                const isActive = location.pathname === item.href;
-                                return (
-                                    <li key={item.key}>
-                                        <Link
-                                            to={item.href}
-                                            className={cn(
-                                                "px-2 lg:px-3 py-2 text-[15px] lg:text-[16px] font-bold transition-colors whitespace-nowrap",
-                                                isActive ? activeLinkClass : cn(textColorClass, hoverLinkClass)
-                                            )}
-                                        >
-                                            {t(item.key as TranslationKey)}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </nav>
-
-
-                    <div className="flex items-center space-x-2 md:space-x-4 shrink-0">
-
-
-                        <div className="relative flex items-center h-10">
-                            <AnimatePresence mode="wait">
-                                {isSearchOpen ? (
-                                    <motion.div
-                                        key="search-open"
-                                        initial={{ width: 40, opacity: 0 }}
-                                        animate={{ width: 180, opacity: 1 }}
-                                        exit={{ width: 40, opacity: 0 }}
-                                        className={cn(
-                                            "flex items-center px-2 py-1.5 rounded-full border",
-                                            isScrolled ? "bg-gray-100 border-gray-200" : "bg-white/20 border-white/30"
-                                        )}
-                                    >
-                                        <Search size={16} className={cn("shrink-0", isScrolled ? "text-cuhk-primary" : "text-white")} />
-                                        <input
-                                            ref={searchInputRef}
-                                            type="text"
-                                            value={searchValue}
-                                            onChange={(e) => setSearchValue(e.target.value)}
-                                            placeholder={language === 'zh' ? "搜索" : "Search"}
-                                            className={cn(
-                                                "bg-transparent border-none outline-none text-sm w-full ml-1",
-                                                isScrolled ? "text-gray-800 placeholder-gray-500" : "text-white placeholder-white/70"
-                                            )}
-                                        />
-                                        <button onClick={closeSearch} className="shrink-0 hover:scale-110 transition-transform">
-                                            <X size={14} className={isScrolled ? "text-gray-400" : "text-white/60"} />
-                                        </button>
-                                    </motion.div>
-                                ) : (
-                                    <motion.button
-                                        key="search-icon"
-                                        onClick={() => setIsSearchOpen(true)}
-                                        className={cn("p-2 transition-colors", textColorClass, "hover:text-cuhk-primary")}
-                                    >
-                                        <Search size={22} />
-                                    </motion.button>
-                                )}
-                            </AnimatePresence>
-                        </div>
-
-
-                        <div className="relative shrink-0">
-                            <button
-                                className={cn(
-                                    "flex items-center space-x-1 py-2 px-1 text-[14px] lg:text-[15px] font-bold transition-colors uppercase tracking-widest whitespace-nowrap",
-                                    textColorClass, "hover:text-cuhk-primary"
-                                )}
-                                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                            >
-                                <span>{language === 'zh' ? '中文' : 'English'}</span>
-                                <ChevronDown size={16} className={cn("transition-transform", isLangDropdownOpen ? "rotate-180" : "")} />
-                            </button>
-
-                            <AnimatePresence>
-                                {isLangDropdownOpen && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 10 }}
-                                        className="absolute right-0 top-full mt-2 bg-white shadow-2xl rounded-md overflow-hidden min-w-[120px] py-1 ring-1 ring-black ring-opacity-5"
-                                    >
-                                        <button
-                                            onClick={() => toggleLanguage('zh')}
-                                            className={cn(
-                                                "w-full text-left px-4 py-2.5 text-[14px] font-bold transition-colors",
-                                                language === 'zh' ? "text-[#750E6D] bg-gray-50" : "text-gray-700 hover:bg-gray-50"
-                                            )}
-                                        >
-                                            中文
-                                        </button>
-                                        <button
-                                            onClick={() => toggleLanguage('en')}
-                                            className={cn(
-                                                "w-full text-left px-4 py-2.5 text-[14px] font-bold transition-colors",
-                                                language === 'en' ? "text-[#750E6D] bg-gray-50" : "text-gray-700 hover:bg-gray-50"
-                                            )}
-                                        >
-                                            English
-                                        </button>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-
-
-                        <button
-                            className={cn("xl:hidden p-2 transition-colors shrink-0", textColorClass)}
-                            onClick={() => setIsMobileMenuOpen(true)}
+                return (
+                  <li 
+                    key={item.key} 
+                    className="relative h-full flex items-center"
+                    onMouseEnter={() => !isDirectLink && setActiveDropdown(item.key)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    {isDirectLink ? (
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "px-4 py-2 text-[15px] font-bold transition-all duration-300 whitespace-nowrap relative group",
+                          isActive ? "text-cuhk-primary" : cn(textColorClass, "hover:text-cuhk-primary")
+                        )}
+                      >
+                        {t(item.key as TranslationKey)}
+                        <span className={cn(
+                          "absolute bottom-0 left-4 right-4 h-0.5 bg-cuhk-primary transform transition-transform duration-300",
+                          isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        )} />
+                      </Link>
+                    ) : (
+                      <div className="h-full flex items-center relative">
+                        <span
+                          className={cn(
+                            "px-4 py-2 text-[15px] font-bold transition-colors whitespace-nowrap cursor-default flex items-center group relative",
+                            isActive || activeDropdown === item.key ? "text-cuhk-primary" : textColorClass,
+                            "hover:text-cuhk-primary"
+                          )}
                         >
-                            <Menu size={28} />
-                        </button>
-                    </div>
-                </div>
+                          {t(item.key as TranslationKey)}
+                          <ChevronDown 
+                            size={14} 
+                            className={cn(
+                              "ml-1.5 transition-transform duration-300", 
+                              activeDropdown === item.key ? "rotate-180" : "opacity-40"
+                            )} 
+                          />
+                          {/* Underline for active parent */}
+                          <span className={cn(
+                            "absolute bottom-0 left-4 right-4 h-0.5 bg-cuhk-primary transform transition-transform duration-300",
+                            isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                          )} />
+                        </span>
+
+                        {/* Dropdown Menu - PERFECTLY CENTERED */}
+                        <AnimatePresence>
+                          {activeDropdown === item.key && (
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-1">
+                              <motion.div
+                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                className="relative min-w-[220px] bg-white shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] rounded-md border border-gray-100 overflow-hidden"
+                              >
+                                <ul className="py-2">
+                                  {item.subItems?.map((sub) => {
+                                    const isSubActive = location.pathname === sub.href;
+                                    return (
+                                      <li key={sub.key}>
+                                        <Link
+                                          to={sub.href}
+                                          className={cn(
+                                            "group/item flex items-center px-6 py-3 text-[14px] font-bold transition-all relative overflow-hidden",
+                                            isSubActive ? "text-cuhk-primary bg-cuhk-primary/5" : "text-gray-700 hover:text-cuhk-primary hover:bg-gray-50"
+                                          )}
+                                          onClick={() => setActiveDropdown(null)}
+                                        >
+                                          {/* Permanent side indicator if active, or hover indicator */}
+                                          <span className={cn(
+                                            "absolute left-0 w-1 transition-all duration-200 bg-cuhk-primary",
+                                            isSubActive ? "h-full" : "h-0 group-hover/item:h-full"
+                                          )} />
+                                          
+                                          <span className={cn(
+                                            "relative z-10 transition-transform duration-200",
+                                            isSubActive ? "translate-x-1" : "translate-x-0 group-hover/item:translate-x-1"
+                                          )}>
+                                            {t(sub.key as TranslationKey)}
+                                          </span>
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </motion.div>
+                            </div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          {/* RIGHT TOOLS */}
+          <div className="flex items-center space-x-2 md:space-x-4 shrink-0">
+            {/* Search */}
+            <div className="relative flex items-center h-10">
+              <AnimatePresence mode="wait">
+                {isSearchOpen ? (
+                  <motion.div 
+                    key="search-open"
+                    initial={{ width: 40, opacity: 0 }}
+                    animate={{ width: 220, opacity: 1 }}
+                    exit={{ width: 40, opacity: 0 }}
+                    className={cn(
+                      "flex items-center px-3 py-1.5 rounded-full border transition-colors",
+                      isScrolled ? "bg-gray-100 border-gray-200" : "bg-white/10 border-white/20"
+                    )}
+                  >
+                    <Search size={18} className={cn("shrink-0", isScrolled ? "text-cuhk-primary" : "text-white")} />
+                    <input 
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      placeholder={language === 'zh' ? "搜索..." : "Search..."}
+                      className={cn(
+                        "bg-transparent border-none outline-none text-[14px] w-full ml-2",
+                        isScrolled ? "text-gray-800 placeholder-gray-400" : "text-white placeholder-white/50"
+                      )}
+                    />
+                    <button onClick={closeSearch} className="shrink-0 p-1">
+                      <X size={14} className={isScrolled ? "text-gray-400" : "text-white"} />
+                    </button>
+                  </motion.div>
+                ) : (
+                  <button 
+                    onClick={() => setIsSearchOpen(true)}
+                    className={cn("p-2.5 transition-transform hover:scale-110", textColorClass, "hover:text-cuhk-primary")}
+                  >
+                    <Search size={22} />
+                  </button>
+                )}
+              </AnimatePresence>
             </div>
 
-
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <>
-                        <motion.div
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="fixed inset-0 bg-black/60 z-[60]"
-                        />
-                        <motion.div
-                            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed right-0 top-0 bottom-0 w-[80%] max-w-sm bg-white z-[70] shadow-2xl p-6 flex flex-col"
-                        >
-                            <div className="flex justify-between items-center mb-10">
-                                <div className="shrink-0">
-                                    <img src={logoSrc} alt="Logo" className="h-10 w-auto" />
-                                </div>
-                                <button onClick={() => setIsMobileMenuOpen(false)}>
-                                    <X size={32} className="text-gray-400 hover:text-gray-600" />
-                                </button>
-                            </div>
-
-                            <nav className="space-y-1 overflow-y-auto">
-                                {NAV_ITEMS.map((item) => (
-                                    <Link
-                                        key={item.key}
-                                        to={item.href}
-                                        className="block py-4 text-lg font-bold text-gray-800 border-b border-gray-100 last:border-0 hover:text-cuhk-primary"
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                        {t(item.key as TranslationKey)}
-                                    </Link>
-                                ))}
-                            </nav>
-
-                            <div className="mt-auto pt-10">
-                                <div className="flex gap-4">
-                                    <button
-                                        onClick={() => { toggleLanguage('zh'); setIsMobileMenuOpen(false); }}
-                                        className={cn("flex-1 py-4 text-base font-bold rounded-lg border", language === 'zh' ? "bg-cuhk-primary text-white" : "text-gray-700")}
-                                    >中文</button>
-                                    <button
-                                        onClick={() => { toggleLanguage('en'); setIsMobileMenuOpen(false); }}
-                                        className={cn("flex-1 py-4 text-base font-bold rounded-lg border", language === 'en' ? "bg-cuhk-primary text-white" : "text-gray-700")}
-                                    >English</button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </>
+            {/* Language */}
+            <div className="relative shrink-0">
+              <button 
+                className={cn(
+                  "flex items-center space-x-1.5 py-2 px-3 text-[14px] font-bold transition-all uppercase tracking-wider",
+                  textColorClass, "hover:text-cuhk-primary"
                 )}
-            </AnimatePresence>
-        </header>
-    );
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+              >
+                <span>{language === 'zh' ? '中文' : 'EN'}</span>
+                <ChevronDown size={14} className={cn("transition-transform duration-300", isLangDropdownOpen ? "rotate-180" : "opacity-50")} />
+              </button>
+              
+              <AnimatePresence>
+                {isLangDropdownOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 top-full mt-3 bg-white shadow-2xl rounded-lg overflow-hidden min-w-[140px] py-1.5 border border-gray-100"
+                  >
+                    {['zh', 'en'].map((lang) => (
+                      <button 
+                        key={lang}
+                        onClick={() => toggleLanguage(lang as 'en' | 'zh')}
+                        className={cn(
+                          "w-full text-left px-5 py-3 text-[14px] font-bold transition-all",
+                          language === lang 
+                            ? "text-cuhk-primary bg-cuhk-primary/5" 
+                            : "text-gray-600 hover:bg-gray-50"
+                        )}
+                      >
+                        {lang === 'zh' ? '简体中文' : 'English'}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Mobile Nav Button */}
+            <button 
+              className={cn("xl:hidden p-2 transition-colors", textColorClass)}
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu size={28} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* MOBILE SIDEBAR */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60]"
+            />
+            <motion.div 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white z-[70] shadow-2xl flex flex-col"
+            >
+              <div className="flex justify-between items-center p-6 border-b border-gray-50">
+                <img src={logoSrc} alt="Logo" className="h-10 w-auto" />
+                <button onClick={() => setIsMobileMenuOpen(false)}>
+                  <X size={28} className="text-gray-400" />
+                </button>
+              </div>
+              
+              <nav className="flex-1 overflow-y-auto px-6 py-4">
+                {NAV_ITEMS.map((item) => {
+                  const hasSubItems = item.subItems && item.subItems.length > 0;
+                  const isActive = isItemActive(item);
+
+                  return (
+                    <div key={item.key} className="mb-2">
+                      {!hasSubItems ? (
+                        <Link
+                          to={item.href}
+                          className={cn(
+                            "flex items-center py-4 text-lg font-bold border-b border-gray-50 transition-colors",
+                            isActive ? "text-cuhk-primary" : "text-gray-800 hover:text-cuhk-primary"
+                          )}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {t(item.key as TranslationKey)}
+                        </Link>
+                      ) : (
+                        <div className="py-4">
+                          <span className={cn(
+                            "flex items-center text-sm font-bold tracking-widest uppercase mb-3",
+                            isActive ? "text-cuhk-primary" : "text-gray-400"
+                          )}>
+                            {t(item.key as TranslationKey)}
+                          </span>
+                          <div className="grid grid-cols-1 gap-1 pl-2">
+                            {item.subItems?.map(sub => {
+                              const isSubActive = location.pathname === sub.href;
+                              return (
+                                <Link 
+                                  key={sub.key} 
+                                  to={sub.href} 
+                                  className={cn(
+                                    "block py-2.5 text-[16px] font-bold transition-colors",
+                                    isSubActive ? "text-cuhk-primary" : "text-gray-700 hover:text-cuhk-primary"
+                                  )}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  {t(sub.key as TranslationKey)}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </nav>
+
+              <div className="p-6 bg-gray-50 border-t border-gray-100">
+                 <div className="flex gap-4">
+                    <button 
+                      onClick={() => { toggleLanguage('zh'); setIsMobileMenuOpen(false); }}
+                      className={cn(
+                        "flex-1 py-3.5 text-sm font-bold rounded-xl transition-all", 
+                        language === 'zh' ? "bg-cuhk-primary text-white shadow-md" : "bg-white text-gray-600 border border-gray-200"
+                      )}
+                    >中文</button>
+                    <button 
+                      onClick={() => { toggleLanguage('en'); setIsMobileMenuOpen(false); }}
+                      className={cn(
+                        "flex-1 py-3.5 text-sm font-bold rounded-xl transition-all", 
+                        language === 'en' ? "bg-cuhk-primary text-white shadow-md" : "bg-white text-gray-600 border border-gray-200"
+                      )}
+                    >English</button>
+                 </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </header>
+  );
 };
 
 export default Header;

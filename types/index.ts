@@ -40,11 +40,12 @@ export interface ProgramItem {
   img: string;
 }
 
-export interface HerosSlidesItem{
+export interface HerosSlidesItem {
   id: number;
   type: string;
-  url:string;
-  title: { prefix: string, highlight: string, suffix: string };
-  subtitle:string;
-  description:string;
+  url: string;
+  title?: { prefix: string; highlight: string; suffix: string };
+  subtitle?: string;
+  description?: string;
+  path?: string;
 }
