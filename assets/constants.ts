@@ -8,7 +8,6 @@ import {
 import video from "@/images/video.mp4";
 import img1 from "@/images/img1.jpg";
 import img2 from "@/images/img2.jpg";
-import { tr } from "framer-motion/client";
 
 export const NAV_ITEMS = [
   { key: "nav.home", href: "/" },

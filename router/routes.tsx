@@ -1,7 +1,7 @@
 import { RouteObject } from "react-router-dom";
-import HomePage from "@/components/HomePage";
-import PlaceholderPage from "@/components/PlaceholderPage";
-
+import {lazy} from 'react'
+const HomePage = lazy(() => import('@/components/HomePage'));
+const PlaceholderPage = lazy(() => import('@/components/PlaceholderPage'));
 const routes: RouteObject[] = [
   {
     path: "/",
