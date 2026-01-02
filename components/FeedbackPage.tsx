@@ -5,7 +5,7 @@ import { User, Smartphone } from 'lucide-react';
 import {useToast} from "@/hooks/ToastContext.tsx";
 
 const FeedbackPage: React.FC = () => {
-    const { t, language } = useLanguage();
+    const { t,  } = useLanguage();
     const { showToast } = useToast();
 
     const [form, setForm] = useState({
@@ -18,7 +18,7 @@ const FeedbackPage: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // After 3 seconds, navigate back to home or services
-        showToast(language === 'zh' ? '反馈成功' : 'success', 'success');
+        showToast(t('feedback.success'), 'success', 4000);
         setForm({
             content: '',
             name: '',
@@ -52,7 +52,7 @@ const FeedbackPage: React.FC = () => {
                   required
                   value={form.content}
                   onChange={e => setForm({...form, content: e.target.value})}
-                  className="w-full h-48 p-4 border border-gray-200 rounded-sm focus:border-cuhk-primary outline-none transition-all resize-none shadow-sm"
+                  className="w-full h-30 p-4 border border-gray-200 rounded-sm focus:border-cuhk-primary outline-none transition-all resize-none shadow-sm"
               />
                         </div>
                     </div>
