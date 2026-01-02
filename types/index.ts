@@ -49,3 +49,22 @@ export interface HerosSlidesItem {
   description?: string;
   path?: string;
 }
+
+export interface ConsultationAnswer {
+  id: string;
+  authorName: string;
+  authorAvatar: string;
+  authorType: 'doctor' | 'patient';
+  title?: string;
+  content: string;
+  timestamp: string;
+  department?: string;
+}
+
+export interface ConsultationQuestion {
+  id: string;
+  content: string;
+  category: string;
+  timestamp: string;
+  answers: ConsultationAnswer[];
+}

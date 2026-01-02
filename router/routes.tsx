@@ -1,11 +1,29 @@
-import { RouteObject } from "react-router-dom";
-import {lazy} from 'react'
+import { lazy } from 'react';
+import { RouteObject } from 'react-router-dom';
+
+// Using relative paths to ensure resolution in all environments
 const HomePage = lazy(() => import('@/components/HomePage'));
 const PlaceholderPage = lazy(() => import('@/components/PlaceholderPage'));
+const ConsultationPage = lazy(() => import('@/components/ConsultationPage'));
+const ConsultationDetailPage = lazy(() => import('@/components/ConsultationDetailPage'));
+const AskDoctorPage = lazy(() => import('@/components/AskDoctorPage'));
+const FeedbackPage = lazy(() => import('@/components/FeedbackPage'));
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: '/consultation',
+    element: <ConsultationPage />,
+  },
+  {
+    path: '/consultation/:id',
+    element: <ConsultationDetailPage />,
+  },
+  {
+    path: '/ask-doctor',
+    element: <AskDoctorPage />,
   },
   {
     path: "/overview",
@@ -29,8 +47,13 @@ const routes: RouteObject[] = [
     element: <PlaceholderPage title="教学培训" />,
   },
   {
-    path: "/guide",
-    element: <PlaceholderPage title="就医指南" />,
+    path: '/patient-services',
+    children:[
+      {
+        path: 'feedback',
+        element: <FeedbackPage />,
+      }
+    ]
   },
   {
     path: "/announcements",

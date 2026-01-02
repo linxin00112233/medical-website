@@ -10,46 +10,53 @@ import img1 from "@/images/img1.jpg";
 import img2 from "@/images/img2.jpg";
 
 export const NAV_ITEMS = [
-  { key: "nav.home", href: "/" },
+  { key: 'nav.home', href: '/' },
   {
-    key: "nav.medical_overview",
-    href: "/overview",
+    key: 'nav.medical_overview',
+    href: '/overview',
     subItems: [
-      { key: "nav.sub.about", href: "/overview/about" },
-      { key: "nav.sub.leadership", href: "/overview/leadership" },
-      { key: "nav.sub.milestones", href: "/overview/milestones" },
-    ],
+      { key: 'nav.sub.about', href: '/overview/about' },
+      { key: 'nav.sub.leadership', href: '/overview/leadership' },
+      { key: 'nav.sub.milestones', href: '/overview/milestones' }
+    ]
   },
   {
-    key: "nav.medical_services",
-    href: "/services",
+    key: 'nav.medical_services',
+    href: '/services',
     subItems: [
-      { key: "nav.sub.clinics", href: "/services/clinics" },
-      { key: "nav.sub.specialists", href: "/services/specialists" },
-      { key: "nav.sub.technology", href: "/services/technology" },
-    ],
+      { key: 'nav.sub.clinics', href: '/services/clinics' },
+      { key: 'nav.sub.specialists', href: '/services/specialists' },
+      { key: 'nav.sub.technology', href: '/services/technology' }
+    ]
   },
   {
-    key: "nav.research_innovation",
-    href: "/research",
+    key: 'nav.research_innovation',
+    href: '/research',
     subItems: [
-      { key: "nav.sub.platforms", href: "/research/platforms" },
-      { key: "nav.sub.projects", href: "/research/projects" },
-      { key: "nav.sub.publications", href: "/research/publications" },
-    ],
+      { key: 'nav.sub.platforms', href: '/research/platforms' },
+      { key: 'nav.sub.projects', href: '/research/projects' },
+      { key: 'nav.sub.publications', href: '/research/publications' }
+    ]
   },
   {
-    key: "nav.education_training",
-    href: "/education",
+    key: 'nav.education_training',
+    href: '/education',
     subItems: [
-      { key: "nav.sub.undergraduate", href: "/education/ug" },
-      { key: "nav.sub.postgraduate", href: "/education/pg" },
-      { key: "nav.sub.continuing", href: "/education/ce" },
-    ],
+      { key: 'nav.sub.undergraduate', href: '/education/ug' },
+      { key: 'nav.sub.postgraduate', href: '/education/pg' },
+      { key: 'nav.sub.continuing', href: '/education/ce' }
+    ]
   },
-  { key: "nav.patient_guide", href: "/guide" },
-  { key: "nav.hospital_announcements", href: "/announcements" },
-  { key: "nav.recruitment", href: "/recruitment" },
+  {
+    key: 'nav.patient_services',
+    href: '/patient-services',
+    subItems: [
+      { key: 'nav.sub.appointment', href: '/patient-services/appointment' },
+      { key: 'nav.sub.feedback', href: '/patient-services/feedback' }
+    ]
+  },
+  { key: 'nav.hospital_announcements', href: '/announcements' },
+  { key: 'nav.recruitment', href: '/recruitment' },
 ];
 
 export const NEWS_ITEMS: NewsItem[] = [

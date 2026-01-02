@@ -176,7 +176,7 @@ const Hero: React.FC = () => {
                   isMediaLoaded ? "opacity-100" : "opacity-0"
                 )}
               />
-              <div className="absolute inset-0 bg-black/30" />
+              {/*<div className="absolute inset-0 bg-black/30" />*/}
               
               {/* Manual Video Control Overlay */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -203,7 +203,7 @@ const Hero: React.FC = () => {
                 )}
                 draggable="false" // Prevent native browser dragging
               />
-              <div className="absolute inset-0 bg-black/30" />
+              {/*<div className="absolute inset-0 bg-black/30" />*/}
             </div>
           )}
         </MotionDiv>
