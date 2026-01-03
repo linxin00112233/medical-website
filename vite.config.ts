@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     },
     server:{
       port:8080,
-      host:'0.0.0.0'
+      host:'0.0.0.0',
     },
     build: {
       // 1. 【关键】禁用生产环境 SourceMap。

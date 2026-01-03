@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Search, ChevronDown } from 'lucide-react';
+import { Menu, X, Search, ChevronDown, Globe } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_ITEMS } from '@/assets/constants';
 import { cn } from '@/utils';
-import { useLanguage } from '@/hooks/LanguageContext';
-import { TranslationKey } from '@/locales/translations';
-import logoSrc from '@/images/logo.svg';
+import { useLanguage } from '../hooks/LanguageContext';
+import { TranslationKey } from '../locales/translations';
+import logoSrc from '@/images/logo.svg'
 
 const Header: React.FC = () => {
   // Fix: Cast motion.div to any to avoid property errors in this environment
@@ -16,7 +16,6 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const location = useLocation();
@@ -37,9 +36,8 @@ const Header: React.FC = () => {
     }
   }, [isSearchOpen]);
 
-  const toggleLanguage = (lang: 'en' | 'zh') => {
-    setLanguage(lang);
-    setIsLangDropdownOpen(false);
+  const toggleLanguage = () => {
+    setLanguage(language === 'zh' ? 'en' : 'zh');
   };
 
   const closeSearch = () => {
@@ -56,9 +54,6 @@ const Header: React.FC = () => {
     return false;
   };
 
-  // 核心视觉逻辑调整：
-  // 1. 如果是在首页，根据滚动状态切换透明/实体背景
-  // 2. 如果是在其他页面（如问诊页），强制显示实体背景，防止文字在浅色背景下看不清
   const isHomePage = location.pathname === '/';
   const shouldShowSolidHeader = !isHomePage || isScrolled;
 
@@ -131,18 +126,15 @@ const Header: React.FC = () => {
                                   activeDropdown === item.key ? "rotate-180" : "opacity-40"
                               )}
                           />
-                          {/* Underline for active parent */}
                           <span className={cn(
                               "absolute bottom-0 left-4 right-4 h-0.5 bg-cuhk-primary transform transition-transform duration-300",
                               isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                           )} />
                         </span>
 
-                              {/* Dropdown Menu - PERFECTLY CENTERED */}
                               <AnimatePresence>
                                 {activeDropdown === item.key && (
                                     <div className="absolute top-full left-1/2 -translate-x-1/2 pt-1">
-                                      {/* Fix: use MotionDiv (cast to any) to avoid TS error */}
                                       <MotionDiv
                                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -163,12 +155,10 @@ const Header: React.FC = () => {
                                                       )}
                                                       onClick={() => setActiveDropdown(null)}
                                                   >
-                                                    {/* Permanent side indicator if active, or hover indicator */}
-                                                    <span className={cn(
-                                                        "absolute left-0 w-1 transition-all duration-200 bg-cuhk-primary",
-                                                        isSubActive ? "h-full" : "h-0 group-hover/item:h-full"
-                                                    )} />
-
+                                          <span className={cn(
+                                              "absolute left-0 w-1 transition-all duration-200 bg-cuhk-primary",
+                                              isSubActive ? "h-full" : "h-0 group-hover/item:h-full"
+                                          )} />
                                                     <span className={cn(
                                                         "relative z-10 transition-transform duration-200",
                                                         isSubActive ? "translate-x-1" : "translate-x-0 group-hover/item:translate-x-1"
@@ -198,7 +188,6 @@ const Header: React.FC = () => {
               <div className="relative flex items-center h-10">
                 <AnimatePresence mode="wait">
                   {isSearchOpen ? (
-                      /* Fix: use MotionDiv (cast to any) to avoid TS error */
                       <MotionDiv
                           key="search-open"
                           initial={{ width: 40, opacity: 0 }}
@@ -236,46 +225,18 @@ const Header: React.FC = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Language */}
-              <div className="relative shrink-0">
-                <button
-                    className={cn(
-                        "flex items-center space-x-1.5 py-2 px-3 text-[14px] font-bold transition-all uppercase tracking-wider",
-                        textColorClass, "hover:text-cuhk-primary"
-                    )}
-                    onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                >
-                  <span>{language === 'zh' ? '中文' : 'EN'}</span>
-                  <ChevronDown size={14} className={cn("transition-transform duration-300", isLangDropdownOpen ? "rotate-180" : "opacity-50")} />
-                </button>
-
-                <AnimatePresence>
-                  {isLangDropdownOpen && (
-                      /* Fix: use MotionDiv (cast to any) to avoid TS error */
-                      <MotionDiv
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          className="absolute right-0 top-full mt-3 bg-white shadow-2xl rounded-lg overflow-hidden min-w-[140px] py-1.5 border border-gray-100"
-                      >
-                        {['zh', 'en'].map((lang) => (
-                            <button
-                                key={lang}
-                                onClick={() => toggleLanguage(lang as 'en' | 'zh')}
-                                className={cn(
-                                    "w-full text-left px-5 py-3 text-[14px] font-bold transition-all",
-                                    language === lang
-                                        ? "text-cuhk-primary bg-cuhk-primary/5"
-                                        : "text-gray-600 hover:bg-gray-50"
-                                )}
-                            >
-                              {lang === 'zh' ? '简体中文' : 'English'}
-                            </button>
-                        ))}
-                      </MotionDiv>
+              {/* NEW Language Toggle Button */}
+              <button
+                  onClick={toggleLanguage}
+                  className={cn(
+                      "flex items-center space-x-2 py-2 px-3 text-[14px] font-bold transition-all border border-transparent rounded-sm group",
+                      textColorClass,
+                      "hover:text-cuhk-primary hover:bg-cuhk-primary/5"
                   )}
-                </AnimatePresence>
-              </div>
+              >
+                <Globe size={18} className="group-hover:text-cuhk-primary transition-colors" />
+                <span>{language === 'zh' ? 'English' : '中文'}</span>
+              </button>
 
               {/* Mobile Nav Button */}
               <button
@@ -292,13 +253,11 @@ const Header: React.FC = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
               <>
-                {/* Fix: use MotionDiv (cast to any) to avoid TS error */}
                 <MotionDiv
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60]"
                 />
-                {/* Fix: use MotionDiv (cast to any) to avoid TS error */}
                 <MotionDiv
                     initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
                     transition={{ type: 'spring', damping: 30, stiffness: 300 }}
@@ -365,14 +324,14 @@ const Header: React.FC = () => {
                   <div className="p-6 bg-gray-50 border-t border-gray-100">
                     <div className="flex gap-4">
                       <button
-                          onClick={() => { toggleLanguage('zh'); setIsMobileMenuOpen(false); }}
+                          onClick={() => { setLanguage('zh'); setIsMobileMenuOpen(false); }}
                           className={cn(
                               "flex-1 py-3.5 text-sm font-bold rounded-xl transition-all",
                               language === 'zh' ? "bg-cuhk-primary text-white shadow-md" : "bg-white text-gray-600 border border-gray-200"
                           )}
                       >中文</button>
                       <button
-                          onClick={() => { toggleLanguage('en'); setIsMobileMenuOpen(false); }}
+                          onClick={() => { setLanguage('en'); setIsMobileMenuOpen(false); }}
                           className={cn(
                               "flex-1 py-3.5 text-sm font-bold rounded-xl transition-all",
                               language === 'en' ? "bg-cuhk-primary text-white shadow-md" : "bg-white text-gray-600 border border-gray-200"

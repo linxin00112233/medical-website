@@ -52,10 +52,18 @@ export const NAV_ITEMS = [
     href: '/patient-services',
     subItems: [
       { key: 'nav.sub.appointment', href: '/patient-services/appointment' },
-      { key: 'nav.sub.feedback', href: '/patient-services/feedback' }
+      { key: 'nav.sub.feedback', href: '/patient-services/feedback' },
+      { key: 'nav.sub.survey', href: '/patient-services/survey' }
     ]
   },
-  { key: 'nav.hospital_announcements', href: '/announcements' },
+  {
+    key: 'nav.hospital_info',
+    href: '/announcements',
+    subItems: [
+      { key: 'nav.sub.news_express', href: '/announcements/news' },
+      { key: 'nav.sub.announcements', href: '/announcements/notices' }
+    ]
+  },
   { key: 'nav.recruitment', href: '/recruitment' },
 ];
 
