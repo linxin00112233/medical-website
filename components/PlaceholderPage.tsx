@@ -1,12 +1,26 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/utils';
+import { api } from '@/api'
 interface PlaceholderPageProps {
   title: string;
   headerClassName?: string;
 }
 
 const PlaceholderPage: React.FC<PlaceholderPageProps> = ({ title,headerClassName }) => {
+  useEffect(()=>{
+    const getArticleList = async ()=>{
+      try {
+        const data = await api.getArticleList({offset:1,limit:10});
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to load Survey", error);
+      } finally {
+
+      }
+    }
+  getArticleList()
+  },[])
   return (
 
     <div className="min-h-screen bg-gray-50 flex flex-col">

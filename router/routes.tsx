@@ -10,6 +10,8 @@ const AskDoctorPage = lazy(() => import('@/components/AskDoctorPage'));
 const FeedbackPage = lazy(() => import('@/components/FeedbackPage'));
 const AppointmentPage = lazy(()=>import('@/components/AppointmentPage'))
 const SurveyPage = lazy(() => import('@/components/SurveyPage'));
+const NewsExpressPage = lazy(()=>import('@/components/NewsExpressPage'))
+const NewsDetailPage = lazy(()=>import('@/components/NewsDetailPage'))
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -70,12 +72,16 @@ const routes: RouteObject[] = [
     children:[
       {
         path: "news",
-        element: <PlaceholderPage title="新闻速递" />,
+        element: <NewsExpressPage/>,
       },
       {
         path: "notices",
         element: <PlaceholderPage title="医院公告" />,
-      }
+      },
+      {
+        path: 'news/:id',
+        element: <NewsDetailPage />,
+      },
     ]
   },
   {

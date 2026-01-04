@@ -68,3 +68,14 @@ export interface ConsultationQuestion {
   timestamp: string;
   answers: ConsultationAnswer[];
 }
+
+// 具体的新闻速递数据结构
+export interface NewsArticleDetail {
+  id: number | string;
+  title: string;
+  picurl: string; // 封面图
+  time: string;   // 发布时间
+  content: string; // 富文本内容
+  category: string; // 用于分类筛选 (前端辅助字段)
+  summary?: string; // 列表页显示的摘要 (可选，如果没有则截取content)
+}
